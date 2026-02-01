@@ -1,0 +1,24 @@
+[project]
+name = "fastapi-emails"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "amartya-dev", email = "amarkaushik1999@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "asyncpg>=0.31.0",
+    "fastapi[standard]>=0.128.0",
+    "google-cloud-tasks>=2.21.0",
+    "httpx>=0.28.1",
+    "pydantic>=2.12.5",
+    "sqlalchemy[asyncio]>=2.0.46",
+    "structlog>=25.5.0",
+    "taskiq>=0.12.1",
+    "taskiq-redis>=1.2.1",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.28,<0.10.0"]
+build-backend = "uv_build"
