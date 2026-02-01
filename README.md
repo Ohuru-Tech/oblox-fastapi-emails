@@ -54,15 +54,35 @@ Templates are stored in your database and use Jinja2 for rendering. Each templat
 - `html_content`: HTML email body (optional)
 - `text_content`: Plain text email body (required)
 
-### Creating Templates
+### Managing Templates
 
-Templates are stored in the `templates` table. Create them via your database:
+Templates are managed through the `TemplatesRepository`. You can add and retrieve templates using the repository pattern.
+
+#### Getting Templates
+
+Use `TemplatesRepository` to retrieve templates by name:
+
+```python
+from fastapi import Depends
+from fastapi_emails import get_templates_repository, TemplatesRepository
+
+async def get_template(
+    templates_repository: TemplatesRepository = Depends(get_templates_repository)
+):
+    template = await templates_repository.get_template_by_name("welcome")
+    return template
+```
+
+#### Adding Templates
+
+Add templates to the repository by creating them in your database:
 
 ```python
 from fastapi_emails import Template
+from fastapi_emails.database import get_database_session
 from sqlalchemy.ext.asyncio import AsyncSession
 
-async def create_template(db: AsyncSession):
+async def create_template(db: AsyncSession = Depends(get_database_session)):
     template = Template(
         name="welcome",
         subject="Welcome {{ user_name }}!",
@@ -74,7 +94,10 @@ async def create_template(db: AsyncSession):
     )
     db.add(template)
     await db.commit()
+    return template
 ```
+
+The `TemplatesRepository` automatically retrieves templates from the database when sending emails, so you don't need to manually fetch templates when using `EmailService`.
 
 ### Template Variables
 
